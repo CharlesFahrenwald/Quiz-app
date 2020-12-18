@@ -24,59 +24,73 @@ function generateQuestionNumberAndScoreHtml(){
 
 function generateAnswersHtml() {
     //this function inputs our answers for each question
-    const allAnswers = store.questions[store.questionNumber].answers
-    let answersHtml = '';
-    let i = 0;
-    allAnswers.forEach(rightAnswer => {
-        answersHtml += `
-        <div id="option-container-${i}">
-        <input type = "radio" name="option${i+1}" value= "${rightAnswer} tabindex= "${i+1}" required>
-        <label for "option${i + 1}"> ${rightAnswer}</label>
-        </div>`;
-        i++;
-    });
-    return answersHtml;
+    const question = store.questions[store.questionNumber];
+ for(let i=0; i < question.options.length; i++)
+ {
+    $('.js.answers').append(
+        <input type = "radio" name="options" id="option${i + 1}" value = "${question.options[ i ]}" tabindex = 
+        "${i + 1}"> 
+        <label for ="option${i+1}"> ${question.options[i]}</label> <br/>
+        <span id="js-r${i + 1}"></span>
+        };
 }
 
 function generateQuestionHtml() {
     // this function inputs our questions into our html 
-    let currentQuestion = store.questions[store.questionNumber];
-    return `
-    <form id="question-form" class="queston-form">
-        <fieldset>
-            <div class="question">
-            <legend>${currentQuestion.question}</legend>
-            </div>
-        <div class="options">
-             <div class="answers">
-            ${generateAnswersHtml()}
-             </div>
-            </div>
-            <button type="submit" id="submit-answer-btn" tabindex="5">Submit</button>
-            <button type="button" id="submit-question-btn" tabindex="6"> Next &gt;</button>
-        </fieldset>
+    let question = store.questions[store.currentQuestion];
+        generateQuestionAndScoreHtml();
+        const questionHtml = $(' <div>
+       <form id= "js-question" class="question-form"
+               <fieldset>
+               <div class="row question">
+                <legend> ${question.question}</legend>
+                </div>
+               <div class= "row options">
+               <div class="js-options"> </div>
+               </div>               
+  <div class= "row">
+                <button type = "submit" id="answer" tabindex="5">Submit</button>
+          <button type = "button" id="next-question" tabindex="6"> Next >></button>
+      </div>
+    </fieldset>
     </form>
-        `;
+  </div>`);
+    $("main").html(questionHtml);
+    updateOptions();
+    $("#next-question").hide();                     
 }
 function handleQuestionFormSubmission() {
   $('body').on('submit', '#question-form' , function (event){
       event.preventDefault();
-      const currentQuestion = store.questions[store.currentQuestion];
+      let current = store.questions[store.currentQuestion];
       let selectedOption = $('input[name=options]:checked').val();
-      let optionContainerID = `#option-container-${currentQuestion.rightAnswer.findIndex(
-          i => i === selectedOption)}`;
-      if (selectedOption === currentQuestion.correctAnswer) {
-          store.score++;
-          $(optionContainerID).append(generateFeedbackHTML('correct'));
-      }
-      else { $(optionContainerID).append(generateFeedbackHTML('incorrect'));
-    }
-    store.currentQuestion++;
-    $('submit-answer-btn').hide();
-    $('input[type=radio]').each(() => {
-        $('input[type=radio]').attr('disable', true);
-    });
-    $('#next-question-btn').show();
+      if (!selectedOption) {
+          
+            alert("Choose an option");
+            return;
+        }
+        let number = current.options.findIndex(i => i === selectedOption);
+        let id = "#js-r" + ++number;
+        $('span').removeClass("correct incorrect");
+        if(selectedOption === current.answer) {
+            STORE.score++;
+            $(`<img src='./icons8-offline-pin-100.png' alt='correct-icon'><br />You got it right!<br/>`).insertBefore("#next-question");
+            $('.question').addClass("hidden");
+            $('.options').addClass("hidden");
+            $(`fieldset`).addClass("correct");
+        }
+        else {
+            $(`<img src='./icons8-error-100.png' alt='incorrect-icon'><br />incorrect... <br/> The correct answer was "${current.answer}"<br/>`).insertBefore("#next-question");
+            $("fieldset").addClass("incorrect");
+            $('.question').addClass("hidden");
+            $('.options').addClass("hidden");
+        }
+
+        STORE.currentQuestion++;
+        $("#js-score").text(`Score: ${STORE.score}/${STORE.questions.length}`);
+        $('#answer').hide();
+        $("input[type=radio]").attr('disabled', true);
+        $('#next-question').show();
   });
   }
 function generateResultsScreen(){
