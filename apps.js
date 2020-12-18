@@ -10,16 +10,15 @@ function generateStartScreenHtml(){
 }
 
 function generateQuestionNumberAndScoreHtml(){
-    return `
- <ul class="question-and-score">
+ const html = $(`<ul class="question-and-score">
     <li id="question-number">
     Queston Number: ${store.questionNumber + 1}/${store.questions.length}
     </li>
     <li id = "score">
     Score: ${store.score}/${store.questions.length}
     </li>
-    </ul>
-  `;
+    </ul>`);
+    $(".question-and-score").html(html);
 }
 
 function generateAnswersHtml() {
@@ -60,7 +59,7 @@ function generateQuestionHtml() {
     $("#next-question").hide();                     
 }
 function handleQuestionFormSubmission() {
-  $('body').on('submit', '#question-form' , function (event){
+  $('body').on('submit', '#js-questions' , function (event){
       event.preventDefault();
       let current = store.questions[store.currentQuestion];
       let selectedOption = $('input[name=options]:checked').val();
@@ -94,7 +93,7 @@ function handleQuestionFormSubmission() {
   });
   }
 function generateResultsScreen(){
-return `
+let resultHtml = $( `
 <div class="results">
   <form id="js-restart-quiz">
     <fieldset>
@@ -111,7 +110,10 @@ return `
     </fieldset>
 </form>
 </div>
-`;
+`);
+    store.currentQuestion = 0;
+    store.score = 0;
+    $("main").html(resultHtml);
 }
 
 function generateFeedbackHTML(answerStatus) {
@@ -129,10 +131,9 @@ function generateFeedbackHTML(answerStatus) {
 
 
 function handleStartClick(){
-    $("main").on('click', '#start-btn', function (event) {
+    $("#start").on('click', function (event) {
         //alert("Clicked start")
-        store.quizStarted = true;
-        renderQuizHTML();
+        generateQuestionHtml();
 });
 }
 
@@ -142,16 +143,9 @@ function handleNextQuestionClick(){
   });
 }
 
-function restartQuiz(){
-    store.quizStarted = false;
-    store.currentQuestion = 0;
-    store.score = 0;
-}
-
 function handleRestartButtonClick() {
-    $('bdoy').on('click','#restart',()=> { 
-        restartQuiz();
-        render();
+    $('bdoy').on('click','#restart',(event)=> { 
+        generateQuestionHtml();
     });
 }
 
