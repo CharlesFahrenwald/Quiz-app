@@ -44,8 +44,7 @@ function generateAnswersHtml() {
  for(let i=0; i < question.options.length; i++)
  {
     $('.js.answers').append(
-        <input type = "radio" name="options" id="option${i + 1}" value = "${question.options[ i ]}" tabindex = 
-        "${i + 1}"> 
+        <input type = "radio" name="options" id="option${i + 1}" value = "${question.options[ i ]}" tabindex = "${i + 1}"> 
         <label for ="option${i+1}"> ${question.options[i]}</label> <br/>
         <span id="js-r${i + 1}"></span>
         };
