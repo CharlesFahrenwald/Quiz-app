@@ -9,6 +9,19 @@ function generateStartScreenHtml(){
     `;
 }
 
+
+
+
+function handleStartClick(){
+    $("#start").on('click', function (event) {
+        //alert("Clicked start")
+        generateQuestionHtml();
+});
+}
+
+
+
+
 function generateQuestionNumberAndScoreHtml(){
  const html = $(`<ul class="question-and-score">
     <li id="question-number">
@@ -21,9 +34,13 @@ function generateQuestionNumberAndScoreHtml(){
     $(".question-and-score").html(html);
 }
 
+
+
+
+
 function generateAnswersHtml() {
     //this function inputs our answers for each question
-    const question = store.questions[store.questionNumber];
+  let question = store.questions[store.questionNumber];
  for(let i=0; i < question.options.length; i++)
  {
     $('.js.answers').append(
@@ -34,6 +51,10 @@ function generateAnswersHtml() {
         };
 }
 
+        
+        
+        
+        
 function generateQuestionHtml() {
     // this function inputs our questions into our html 
     let question = store.questions[store.currentQuestion];
@@ -58,6 +79,11 @@ function generateQuestionHtml() {
     updateOptions();
     $("#next-question").hide();                     
 }
+     
+     
+     
+     
+     
 function handleQuestionFormSubmission() {
   $('body').on('submit', '#js-questions' , function (event){
       event.preventDefault();
@@ -72,7 +98,7 @@ function handleQuestionFormSubmission() {
         let id = "#js-r" + ++number;
         $('span').removeClass("correct incorrect");
         if(selectedOption === current.answer) {
-            STORE.score++;
+            store.score++;
             $(`<img src='./icons8-offline-pin-100.png' alt='correct-icon'><br />You got it right!<br/>`).insertBefore("#next-question");
             $('.question').addClass("hidden");
             $('.options').addClass("hidden");
@@ -85,13 +111,18 @@ function handleQuestionFormSubmission() {
             $('.options').addClass("hidden");
         }
 
-        STORE.currentQuestion++;
-        $("#js-score").text(`Score: ${STORE.score}/${STORE.questions.length}`);
+        store.currentQuestion++;
+        $("#js-score").text(`Score: ${store.score}/${store.questions.length}`);
         $('#answer').hide();
         $("input[type=radio]").attr('disabled', true);
         $('#next-question').show();
   });
   }
+     
+     
+     
+     
+     
 function generateResultsScreen(){
 let resultHtml = $( `
 <div class="results">
@@ -116,71 +147,32 @@ let resultHtml = $( `
     $("main").html(resultHtml);
 }
 
-function generateFeedbackHTML(answerStatus) {
-    let correctAnswer = store.questions[store.currentQuestion].correctAwnser;
-    let htmlToDisplay = '';
-    if (answerStatus === 'correct') {
-        htmlToDisplay = `<div class="right-answer">Correct</div>`;
-    }
-    else if (answerStatus === 'incorrect') {
-        htmlToDisplay =`<div class="wrong-answer">Incorrect. The correct answer is ${correctAnswer}.</div>`;
-    }
-    return htmlToDisplay; 
+     
+     
+     
+ function endOfQuiz() {
+     $('body').on('click', '#next-question',(event) => {
+         store.currentQuestion === store.questions.length
+         ? generateResultsScreen()
+         : generateQuestionHtml();
+     });
  }
 
-
-
-function handleStartClick(){
-    $("#start").on('click', function (event) {
-        //alert("Clicked start")
-        generateQuestionHtml();
-});
-}
-
-function handleNextQuestionClick(){  
-    $('body').on('click', '#next-question-btn', (event) => {
-    render();
-  });
-}
-
+     
+     
+     
+     
 function handleRestartButtonClick() {
-    $('bdoy').on('click','#restart',(event)=> { 
+    $('body').on('click','#restart',(event)=> {
         generateQuestionHtml();
     });
 }
 
 
-// This function will display the appropriate html, based on the state that the 
-// Quiz is in
-function renderQuizHTML(){
-    // The html that we want to display on the screen
-    let htmlToDisplay = '';
-    // Checking if our stores quizStarted variable is false
-    if(store.quizStarted === false){
-        //alert("Quiz hasnt started")
-        // if it is false then we want to set out html that we want to display
-        // as the startscreen html
-        htmlToDisplay = generateStartScreenHtml();
-        // We are setting the html code for the main tag inside of our html
-        // to the start screens html that we stored inside of htmlToDisplay
-        $("main").html(htmlToDisplay);
-    }
-    // setting the questions to not go over how many questions we have
-    else if(store.questionNumber >= 0 && store.questionNumber < store.questions.length){
-        htmlToDisplay = generateQuestionNumberAndScoreHtml();
-        htmlToDisplay += generateQuestionHtml();
-        $("main").html(htmlToDisplay);
-    }
-else {
-    $('main').html(generateResultsScreen());
-}
-
-}
 
 function handleQuizApp(){
-    renderQuizHTML();
     handleStartClick();
-    handleNextQuestionClick();
+    endOfQuiz();
     handleQuestionFormSubmission();
     handleRestartButtonClick();
 }
