@@ -58,18 +58,21 @@ function generateAnswersHtml() {
 function generateQuestionHtml() {
     // this function inputs our questions into our html 
     let question = store.questions[store.currentQuestion];
-        generateQuestionAndScoreHtml();
-        const questionHtml = $(' <div>
+    generateQuestionAndScoreHtml();
+        const questionHtml = $(' 
+     <div>
        <form id= "js-question" class="question-form"
-               <fieldset>
+        
+           <fieldset>
                <div class="row question">
                 <legend> ${question.question}</legend>
                 </div>
+                               
                <div class= "row options">
                <div class="js-options"> </div>
                </div>               
   <div class= "row">
-                <button type = "submit" id="answer" tabindex="5">Submit</button>
+          <button type = "submit" id="answer" tabindex="5">Submit</button>
           <button type = "button" id="next-question" tabindex="6"> Next >></button>
       </div>
     </fieldset>
