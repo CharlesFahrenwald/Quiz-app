@@ -59,7 +59,7 @@ function generateQuestionHtml() {
     // this function inputs our questions into our html 
     let question = store.questions[store.currentQuestion];
     generateQuestionAndScoreHtml();
-        const questionHtml = $(' 
+        const questionHtml = $(` 
      <div>
        <form id= "js-question" class="question-form"
         
