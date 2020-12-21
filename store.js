@@ -6,7 +6,7 @@ const store = {
         answers: [
           'Harrison Ford',
           'Henry Ford',
-          'Thmoas Edison',
+          'Thomas Edison',
           'Clara Bryant Ford'
         ],
         correctAnswer: 'Henry Ford'
@@ -16,7 +16,7 @@ const store = {
         answers: [
           'Ben Franklin',
           'Paul Revere',
-          'Thmoas Edison',
+          'Thomas Edison',
           'Abraham Lincoln'
         ],
         correctAnswer: 'Thomas Edison'
@@ -27,7 +27,7 @@ const store = {
             'George Washington',
             'Abraham Lincoln',
             'John F Kennedy',
-            'Wopdrow Wilson'
+            'Woodrow Wilson'
         ],
         correctAnswer: 'George Washington'
       },
