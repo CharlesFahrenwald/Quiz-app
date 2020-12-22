@@ -6,7 +6,9 @@ body {
   background: cover;
   background-color:blue;
 }
-
+p{
+text-size: 45;
+}
 header {
   padding: 55px 0 0 0;
   color: white;
