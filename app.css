@@ -51,7 +51,10 @@ legend {
   margin:0;
   text-align:left;
 }
-
+.div.First-Page {
+  text-align: center;
+  text-size: large;
+}
 label {
   font-size: 10px;
 }
